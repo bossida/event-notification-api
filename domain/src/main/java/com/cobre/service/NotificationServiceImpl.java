@@ -5,15 +5,14 @@ import com.cobre.api.NotificationService;
 import com.cobre.dto.EventInputDto;
 import com.cobre.enums.NotificationStatus;
 import com.cobre.exceptions.NotificationNotFoundException;
-import com.cobre.model.EventNotification;
 import com.cobre.model.Notification;
 import com.cobre.model.NotificationPublish;
 import com.cobre.spi.EventNotificationProvider;
 import com.cobre.spi.EventNotificationPublisher;
 import com.cobre.spi.NotificationProvider;
-import org.apache.logging.log4j.message.StringFormattedMessage;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @DomainService
 public class NotificationServiceImpl implements NotificationService {
@@ -43,7 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
         notificationProvider.saveNotification(notification);
     }
 
-
+    @Override
     public void sendNotification(EventInputDto event) throws NotificationNotFoundException {
         var eNotificationOpt = eventNotificationProvider.getEventsByClientIdAndEventId(event.clientId(), event.eventId());
         if (eNotificationOpt.isEmpty()){
@@ -67,6 +66,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     }
 
-
+    @Override
+    public List<Notification> getNotifications(){
+        return notificationProvider.getNotificationList();
+    }
 
 }

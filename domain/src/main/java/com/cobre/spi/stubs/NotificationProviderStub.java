@@ -15,4 +15,8 @@ public class NotificationProviderStub implements NotificationProvider {
         notificationList.add(notification);
     }
 
+    @Override
+    public List<Notification> getNotificationList(){
+        return notificationList;
+    }
 }
