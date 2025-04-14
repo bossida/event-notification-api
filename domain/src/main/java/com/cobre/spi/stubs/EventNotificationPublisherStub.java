@@ -5,10 +5,11 @@ import com.cobre.model.EventNotification;
 import com.cobre.model.NotificationPublish;
 import com.cobre.spi.EventNotificationPublisher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventNotificationPublisherStub implements EventNotificationPublisher {
-    private List<NotificationPublish> notificationList;
+    private final List<NotificationPublish> notificationList = new ArrayList<NotificationPublish>();
 
     @Override
     public NotificationStatus sendNotification(NotificationPublish eventNotification) {
