@@ -1,5 +1,6 @@
 package com.cobre.configuration;
 
+import com.cobre.EventNotificationPublisherImpl;
 import com.cobre.api.NotificationService;
 import com.cobre.service.NotificationServiceImpl;
 import com.cobre.spi.EventNotificationProvider;
@@ -21,7 +22,7 @@ public class DomainConfiguration {
     @Bean
     public NotificationServiceImpl createNotificationService(){
         EventNotificationProvider eventNotificationProvider = new EventNotificationProviderStub();
-        EventNotificationPublisher eventNotificationPublisher = new EventNotificationPublisherStub();
+        EventNotificationPublisher eventNotificationPublisher = new EventNotificationPublisherImpl();
         NotificationProvider notificationProvider = new NotificationProviderStub();
         var notificationService = new NotificationServiceImpl(eventNotificationProvider,eventNotificationPublisher, notificationProvider);
         return notificationService;

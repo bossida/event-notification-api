@@ -11,7 +11,7 @@ public class EventNotificationProviderStub implements EventNotificationProvider 
 
     private List<EventNotification> createEventNotifications(){
         var event1 = new EventNotification(true,
-                10L, "webhook1", 1,
+                10L, "http://localhost:8080/test", 1,
                 LocalDateTime.now(),1L);
         return List.of(event1);
     }
