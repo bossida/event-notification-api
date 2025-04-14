@@ -29,10 +29,10 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     private Notification createNotification(EventNotification eventNotification, EventInputDto event, boolean delivered, NotificationStatus notificationStatus) {
-        var notification = new Notification(
+        return  new Notification(
                 delivered, event.clientId(), eventNotification.eventId(), LocalDateTime.now(), 0,
                 event.message(), notificationStatus);
-        return notification;
+
     }
 
     private void saveError(EventInputDto event) {
