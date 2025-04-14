@@ -1,6 +1,7 @@
 package com.cobre.spi.stubs;
 
 import com.cobre.enums.NotificationStatus;
+import com.cobre.exceptions.WebHookClientNotFoundException;
 import com.cobre.model.EventNotification;
 import com.cobre.model.NotificationPublish;
 import com.cobre.spi.EventNotificationPublisher;
@@ -12,7 +13,7 @@ public class EventNotificationPublisherStub implements EventNotificationPublishe
     private final List<NotificationPublish> notificationList = new ArrayList<NotificationPublish>();
 
     @Override
-    public NotificationStatus sendNotification(NotificationPublish eventNotification) {
+    public NotificationStatus sendNotification(NotificationPublish eventNotification) throws WebHookClientNotFoundException {
         notificationList.add(eventNotification);
         return NotificationStatus.SUCCESS;
     }

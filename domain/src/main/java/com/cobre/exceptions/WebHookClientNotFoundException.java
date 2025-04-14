@@ -1,4 +1,4 @@
-package com.cobre.exception;
+package com.cobre.exceptions;
 
 public class WebHookClientNotFoundException extends Exception{
 

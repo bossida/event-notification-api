@@ -5,6 +5,7 @@ import com.cobre.api.NotificationService;
 import com.cobre.dto.EventInputDto;
 import com.cobre.enums.NotificationStatus;
 import com.cobre.exceptions.NotificationNotFoundException;
+import com.cobre.exceptions.WebHookClientNotFoundException;
 import com.cobre.model.Notification;
 import com.cobre.model.NotificationPublish;
 import com.cobre.spi.EventNotificationProvider;
@@ -43,7 +44,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotification(EventInputDto event) throws NotificationNotFoundException {
+    public void sendNotification(EventInputDto event) throws NotificationNotFoundException, WebHookClientNotFoundException {
         var eNotificationOpt = eventNotificationProvider.getEventsByClientIdAndEventId(event.clientId(), event.eventId());
         if (eNotificationOpt.isEmpty()){
             String error = "The event was not found for client id " + event.clientId() + " - eventId " + event.eventId();
@@ -55,7 +56,14 @@ public class NotificationServiceImpl implements NotificationService {
 
         if (eventNotification.deliver()){
             var notificationPublish = new NotificationPublish( event.message(),eventNotification.webhookUrl());
-            var status = eventNotificationPublisher.sendNotification(notificationPublish);
+            NotificationStatus status = null;
+            try {
+                status = eventNotificationPublisher.sendNotification(notificationPublish);
+            } catch (WebHookClientNotFoundException e) {
+                var notification = createNotification(eventNotification.eventId(), event, false, NotificationStatus.ERROR);
+                notificationProvider.saveNotification(notification);
+                throw e;
+            }
             var delivered = NotificationStatus.SUCCESS == status;
             var notification = createNotification(eventNotification.eventId(), event, delivered, status);
             notificationProvider.saveNotification(notification);

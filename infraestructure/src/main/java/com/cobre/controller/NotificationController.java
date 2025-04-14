@@ -2,6 +2,7 @@ package com.cobre.controller;
 
 import com.cobre.dto.EventInputDto;
 import com.cobre.exceptions.NotificationNotFoundException;
+import com.cobre.exceptions.WebHookClientNotFoundException;
 import com.cobre.model.Notification;
 import com.cobre.service.NotificationServiceImpl;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class NotificationController {
     }
 
     @PostMapping
-    public void sendNotification(@RequestBody EventInputDto event) throws NotificationNotFoundException {
+    public void sendNotification(@RequestBody EventInputDto event) throws NotificationNotFoundException, WebHookClientNotFoundException {
         notificationService.sendNotification(event);
     }
 

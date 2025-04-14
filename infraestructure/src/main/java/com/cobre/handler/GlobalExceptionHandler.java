@@ -1,7 +1,7 @@
 package com.cobre.handler;
 
-import com.cobre.exception.WebHookClientNotFoundException;
 import com.cobre.exceptions.NotificationNotFoundException;
+import com.cobre.exceptions.WebHookClientNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

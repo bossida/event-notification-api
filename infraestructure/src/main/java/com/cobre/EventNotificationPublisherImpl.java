@@ -1,9 +1,8 @@
 package com.cobre;
 
 import com.cobre.enums.NotificationStatus;
-import com.cobre.exception.WebHookClientNotFoundException;
+import com.cobre.exceptions.WebHookClientNotFoundException;
 import com.cobre.model.NotificationPublish;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -18,22 +17,22 @@ public class EventNotificationPublisherImpl implements com.cobre.spi.EventNotifi
     }
 
     @Override
-    public NotificationStatus sendNotification(NotificationPublish notificationPublish) {
+    public NotificationStatus sendNotification(NotificationPublish notificationPublish) throws WebHookClientNotFoundException{
         var webClient = this.webClient(notificationPublish.webHook());
         webClient
                 .put()
                 .retrieve()
-                .onStatus(status -> status.is5xxServerError(), clientResponse ->
+                .onStatus(status -> status.is4xxClientError(), clientResponse ->
                         clientResponse.bodyToMono(String.class)
                                 .flatMap(errorBody -> {
                                     System.out.println("Client error: " + errorBody);
-                                    return Mono.error(new WebHookClientNotFoundException("4xx error: " + errorBody));
+                                    return Mono.error(new WebHookClientNotFoundException("The webhook url was not found"));
                                 }))
                 .onStatus(status -> status.is5xxServerError(), clientResponse ->
                         clientResponse.bodyToMono(String.class)
                                 .flatMap(errorBody -> {
                                     System.out.println("Server error: " + errorBody);
-                                    return Mono.error(new WebHookClientNotFoundException("5xx error: " + errorBody));
+                                    return Mono.error(new WebHookClientNotFoundException("Error when calling the webhook" ));
                                 }))
                 .bodyToMono(String.class)
                 .block();
